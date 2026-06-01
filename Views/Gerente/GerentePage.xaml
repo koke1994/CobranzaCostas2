@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CobranzaCostas.ViewModels"
+             x:Class="CobranzaCostas.Views.Gerente.GerentePage"
+             x:DataType="vm:GerenteViewModel"
+             Title="Compromiso Relacional - Gerente">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salir" Command="{Binding CerrarSesionCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView Padding="15">
+        <VerticalStackLayout Spacing="20">
+            
+            <!-- Cabecera -->
+            <Label Text="{Binding FechaHoy, StringFormat='Fecha de Registro: {0}'}" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center" />
+
+            <!-- Indicador de carga y mensajes -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" Color="#FF9800" />
+            <Label Text="{Binding MensajeValidacion}" TextColor="Red" HorizontalOptions="Center" FontAttributes="Bold" />
+
+            <!-- SECCIÓN COMPROMISO GERENCIAL -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Métricas de Supervisión" FontAttributes="Bold" FontSize="16" TextColor="#FF9800" />
+                    
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="15" ColumnSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Visitas de Apoyo:" VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding CompromisoActual.VisitasDeApoyo}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Reuniones de Equipo:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding CompromisoActual.ReunionesEquipo}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Cobranza Supervisada ($):" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="{Binding CompromisoActual.CobranzaSupervisada}" Keyboard="Numeric" />
+                    </Grid>
+
+                    <Button Text="Guardar Compromiso" Command="{Binding GuardarCompromisoCommand}" Margin="0,20,0,0" BackgroundColor="#FF9800" TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

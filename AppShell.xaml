@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:CobranzaCostas.Views"
+    x:Class="CobranzaCostas.AppShell"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!--
+        Punto de entrada: LoginView.
+        Las vistas de rol (Director, Regional, Gerente, Gestor) se registran
+        como rutas programáticas en AppShell.xaml.cs y se navega a ellas
+        mediante Shell.Current.GoToAsync("//NombrePagina") desde el LoginViewModel.
+    -->
+    <ShellContent
+        Route="LoginView"
+        ContentTemplate="{DataTemplate views:LoginView}"
+        Shell.NavBarIsVisible="False"/>
+
+</Shell>

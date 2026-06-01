@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CobranzaCostas.ViewModels"
+             x:Class="CobranzaCostas.Views.Gestor.GestorPage"
+             x:DataType="vm:GestorViewModel"
+             Title="Avance Diario - Gestor">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salir" Command="{Binding CerrarSesionCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView Padding="15">
+        <VerticalStackLayout Spacing="20">
+            
+            <!-- Cabecera -->
+            <Label Text="{Binding FechaHoy, StringFormat='Fecha: {0}'}" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center" />
+            <Label Text="{Binding CorteActual, StringFormat='Corte activo: {0}'}" FontSize="16" HorizontalOptions="Center" TextColor="Gray" />
+
+            <!-- Indicador de carga y mensajes -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" Color="#2196F3" />
+            <Label Text="{Binding MensajeValidacion}" TextColor="Red" HorizontalOptions="Center" FontAttributes="Bold" />
+
+            <!-- 1. SECCIÓN COMPROMISO -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="1. Compromiso (Proyectado)" FontAttributes="Bold" FontSize="16" TextColor="#2196F3" />
+                    
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Visitas:" VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding AvanceActual.Compromiso.Visitas}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Efectivas:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding AvanceActual.Compromiso.Efectivas}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Cobranza ($):" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="{Binding AvanceActual.Compromiso.Cobranza}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Pase 6 a 7 ($):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="{Binding AvanceActual.Compromiso.Pase6a7}" Keyboard="Numeric" />
+                    </Grid>
+
+                    <Button Text="Guardar Compromiso" Command="{Binding GuardarCompromisoCommand}" Margin="0,15,0,0" BackgroundColor="#2196F3" TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 2. SECCIÓN AVANCE -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="2. Avance Real" FontAttributes="Bold" FontSize="16" TextColor="#4CAF50" />
+                    
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Visitas:" VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding AvanceActual.Avance.Visitas}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Efectivas:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding AvanceActual.Avance.Efectivas}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Cobranza ($):" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="{Binding AvanceActual.Avance.Cobranza}" Keyboard="Numeric" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Pase 6 a 7 ($):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="{Binding AvanceActual.Avance.Pase6a7}" Keyboard="Numeric" />
+                    </Grid>
+
+                    <Button Text="Actualizar Avance" Command="{Binding ActualizarAvanceCommand}" Margin="0,15,0,0" BackgroundColor="#4CAF50" TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

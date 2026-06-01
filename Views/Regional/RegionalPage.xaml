@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CobranzaCostas.ViewModels"
+             x:Class="CobranzaCostas.Views.Regional.RegionalPage"
+             x:DataType="vm:RegionalViewModel"
+             Title="Supervisión Regional">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salir" Command="{Binding CerrarSesionCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView Padding="15">
+        <VerticalStackLayout Spacing="20">
+            
+            <!-- Cabecera -->
+            <Label Text="{Binding FechaHoy, StringFormat='Fecha: {0}'}" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center" />
+            <Label Text="{Binding RegionActual, StringFormat='Región Activa: {0}'}" FontSize="16" HorizontalOptions="Center" TextColor="Gray" />
+
+            <!-- Indicador de carga -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" Color="#9C27B0" />
+            <Label Text="{Binding MensajeValidacion}" TextColor="Red" HorizontalOptions="Center" FontAttributes="Bold" />
+
+            <!-- SECCIÓN MÉTRICAS (En construcción) -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Métricas de Gerencias" FontAttributes="Bold" FontSize="16" TextColor="#9C27B0" HorizontalOptions="Center" />
+                    <Label Text="Vista en construcción..." FontAttributes="Italic" TextColor="Gray" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

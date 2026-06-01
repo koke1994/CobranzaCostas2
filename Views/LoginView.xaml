@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:CobranzaCostas.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="CobranzaCostas.Views.LoginView"
+    x:DataType="vm:LoginViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#0D1B2A">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<Grid>
+		<ScrollView VerticalOptions="Center">
+			<VerticalStackLayout Padding="32" Spacing="20" HorizontalOptions="Center" WidthRequest="360">
+
+				<VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+					<Label
+                        Text="COBRANZA COSTAS"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="#FFD700"
+                        HorizontalOptions="Center"
+                        CharacterSpacing="2"/>
+					<Label
+                        Text="División Cobranza Metro Sur"
+                        FontSize="13"
+                        TextColor="#5588AA"
+                        HorizontalOptions="Center"/>
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="16" Padding="20" BackgroundColor="#1A2D42">
+
+					<Entry
+                        Text="{Binding Email}"
+                        Placeholder="Correo de empleado"
+                        PlaceholderColor="#5588AA"
+                        TextColor="White"
+                        Keyboard="Email"
+                        BackgroundColor="#0D1B2A"/>
+
+					<Entry
+                        Text="{Binding Password}"
+                        Placeholder="Contraseña"
+                        PlaceholderColor="#5588AA"
+                        TextColor="White"
+                        IsPassword="True"
+                        BackgroundColor="#0D1B2A"/>
+
+					<Label
+                        Text="{Binding ErrorMessage}"
+                        TextColor="#FF4444"
+                        FontSize="12"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"/>
+
+					<Button
+                        Text="INGRESAR"
+                        Command="{Binding LoginCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0D1B2A"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        HeightRequest="50"
+                        CornerRadius="8"
+                        CharacterSpacing="2"/>
+
+					<ActivityIndicator
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="#FFD700"
+                        HorizontalOptions="Center"/>
+				</VerticalStackLayout>
+
+				<Label
+                    Text="GCC Zihuatanejo · 2026"
+                    FontSize="11"
+                    TextColor="#2A4A6A"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"/>
+
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>

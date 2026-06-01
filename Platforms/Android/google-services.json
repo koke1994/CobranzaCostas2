@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "588806094408",
+    "project_id": "cobranza-acapulco-costas",
+    "storage_bucket": "cobranza-acapulco-costas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588806094408:android:71679e143e3d508b80227d",
+        "android_client_info": {
+          "package_name": "com.gcc.cobranzacostas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIAr_XboePVwv8e1uBq3BVl16kgtuA8Qo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
