@@ -1,17 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
 namespace CobranzaCostas
 {
     public partial class App : Application
     {
-        public App()
+        // AppShell inyectado desde DI — registrado como Singleton en MauiProgram
+        public App(AppShell shell)
         {
             InitializeComponent();
-        }
-
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
+            MainPage = shell;
         }
     }
 }
