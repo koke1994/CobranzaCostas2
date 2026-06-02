@@ -20,9 +20,8 @@ namespace CobranzaCostas
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            // Inicialización explícita de Firebase eliminada para evitar errores de compilación
-            // Si la versión del plugin que usas requiere inicialización en MainActivity, reintroduce la llamada
-            // usando la API exacta del paquete instalado.
+            // Firebase se inicializa automáticamente via google-services.json
+            // en Plugin.Firebase v5.x — no se requiere CrossFirebase.Initialize()
         }
     }
 }

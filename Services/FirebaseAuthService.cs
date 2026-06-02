@@ -2,14 +2,8 @@ using Plugin.Firebase.Auth;
 
 namespace CobranzaCostas.Services;
 
-/// <summary>
-/// Encapsula toda la interacción con Firebase Authentication.
-/// </summary>
 public class FirebaseAuthService
 {
-    /// <summary>
-    /// Autentica al usuario con correo y contraseña.
-    /// </summary>
     public async Task<string?> LoginAsync(string email, string password)
     {
         try
@@ -17,8 +11,9 @@ public class FirebaseAuthService
             var result = await CrossFirebaseAuth.Current
                 .SignInWithEmailAndPasswordAsync(email, password);
 
-            // En la versión actual, result.User nos da directamente el objeto IFirebaseUser
-            return result?.Uid;
+            var uid = result?.Uid;
+            Console.WriteLine($"[FirebaseAuth] Login — UID obtenido: '{uid}'");
+            return uid;
         }
         catch (Exception ex)
         {
@@ -27,20 +22,12 @@ public class FirebaseAuthService
         }
     }
 
-    /// <summary>Cierra la sesión activa en Firebase Auth.</summary>
     public async Task LogoutAsync()
     {
-        try
-        {
-            await CrossFirebaseAuth.Current.SignOutAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[FirebaseAuth] Error en logout: {ex.Message}");
-        }
+        try { await CrossFirebaseAuth.Current.SignOutAsync(); }
+        catch (Exception ex) { Console.WriteLine($"[FirebaseAuth] Logout error: {ex.Message}"); }
     }
 
-    /// <summary>Devuelve el UID del usuario actualmente autenticado, o null si no hay sesión.</summary>
     public string? GetCurrentUserId() =>
         CrossFirebaseAuth.Current.CurrentUser?.Uid;
 

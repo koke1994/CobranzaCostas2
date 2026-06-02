@@ -8,11 +8,10 @@ namespace CobranzaCostas.ViewModels;
 public partial class LoginViewModel : ObservableObject
 {
     private readonly FirebaseAuthService _authService;
-    private readonly FirestoreService    _firestoreService;
-    private readonly SessionService      _sessionService;
+    private readonly FirestoreService _firestoreService;
+    private readonly SessionService _sessionService;
     private readonly ILogger<LoginViewModel> _logger;
 
-    // ── Propiedades observables ──────────────────────────────────
     [ObservableProperty]
     private string email = string.Empty;
 
@@ -25,53 +24,51 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private string errorMessage = string.Empty;
 
-    // ── Constructor ──────────────────────────────────────────────
     public LoginViewModel(
         FirebaseAuthService authService,
-        FirestoreService    firestoreService,
-        SessionService      sessionService,
+        FirestoreService firestoreService,
+        SessionService sessionService,
         ILogger<LoginViewModel> logger)
     {
-        _authService      = authService;
+        _authService = authService;
         _firestoreService = firestoreService;
-        _sessionService   = sessionService;
-        _logger           = logger;
+        _sessionService = sessionService;
+        _logger = logger;
     }
 
-    // ── Comandos ─────────────────────────────────────────────────
     [RelayCommand]
     private async Task LoginAsync()
     {
-        // Normalizar entrada de correo antes de validar
         Email = Email?.Trim() ?? string.Empty;
-
-        // Validación básica de campos
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
             ErrorMessage = "Ingresa tu correo y contraseña.";
             return;
         }
 
-        IsBusy       = true;
+        IsBusy = true;
         ErrorMessage = string.Empty;
 
         try
         {
-            // 1. Autenticar con Firebase Auth
+            // PASO 1: Auth
             var uid = await _authService.LoginAsync(Email, Password);
 
+            // DEBUG TEMPORAL — muestra el UID en pantalla
             if (uid is null)
             {
-                ErrorMessage = "Credenciales incorrectas. Verifica tus datos.";
+                ErrorMessage = "Auth falló — UID es null. Verifica correo/contraseña.";
                 return;
             }
 
-            // 2. Obtener perfil del usuario desde Firestore
-            var usuario = await _firestoreService.GetUsuarioAsync(uid);
+            ErrorMessage = $"Auth OK. UID={uid}. Buscando en Firestore...";
+            await Task.Delay(1500); // pausa para leer el mensaje
 
+            // PASO 2: Firestore
+            var usuario = await _firestoreService.GetUsuarioAsync(uid);
             if (usuario is null)
             {
-                ErrorMessage = "Usuario no encontrado en el sistema. Contacta al administrador.";
+                ErrorMessage = $"No encontrado en Firestore. UID buscado: '{uid}'";
                 return;
             }
 
@@ -81,22 +78,20 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            // 3. Guardar sesión en memoria
             _sessionService.UsuarioActual = usuario;
 
-            // 4. Redirigir según rol
             var rutaDestino = usuario.Rol switch
             {
                 "Director" => "//DirectorPage",
                 "Regional" => "//RegionalPage",
-                "Gerente"  => "//GerentePage",
-                "Gestor"   => "//GestorPage",
-                _          => null
+                "Gerente" => "//GerentePage",
+                "Gestor" => "//GestorPage",
+                _ => null
             };
 
             if (rutaDestino is null)
             {
-                ErrorMessage = $"Rol '{usuario.Rol}' no reconocido. Contacta al administrador.";
+                ErrorMessage = $"Rol '{usuario.Rol}' no reconocido.";
                 return;
             }
 
@@ -104,8 +99,8 @@ public partial class LoginViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Error de conexión. Verifica tu red e intenta nuevamente.";
-            _logger.LogError(ex, "Excepción no controlada durante el proceso de inicio de sesión.");
+            ErrorMessage = $"Excepción: {ex.Message}";
+            _logger.LogError(ex, "Error en login.");
         }
         finally
         {
@@ -116,7 +111,6 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private async Task VerificarSesionAsync()
     {
-        // Si Firebase no tiene una sesión activa, simplemente terminamos y mostramos el login
         if (!_authService.IsLoggedIn) return;
 
         IsBusy = true;
@@ -127,9 +121,7 @@ public partial class LoginViewModel : ObservableObject
             var uid = _authService.GetCurrentUserId();
             if (string.IsNullOrEmpty(uid)) return;
 
-            // Buscamos el perfil usando el UID persistido
             var usuario = await _firestoreService.GetUsuarioAsync(uid);
-
             if (usuario is null || !usuario.Activo)
             {
                 await _sessionService.CerrarSesionGlobalAsync();
@@ -137,25 +129,29 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            // Restauramos la sesión en RAM y redirigimos
             _sessionService.UsuarioActual = usuario;
+
             var rutaDestino = usuario.Rol switch
             {
                 "Director" => "//DirectorPage",
                 "Regional" => "//RegionalPage",
-                "Gerente"  => "//GerentePage",
-                "Gestor"   => "//GestorPage",
-                _          => null
+                "Gerente" => "//GerentePage",
+                "Gestor" => "//GestorPage",
+                _ => null
             };
 
-            if (rutaDestino != null) await Shell.Current.GoToAsync(rutaDestino);
+            if (rutaDestino != null)
+                await Shell.Current.GoToAsync(rutaDestino);
         }
         catch (Exception ex)
         {
-            ErrorMessage = "No se pudo restaurar tu sesión automáticamente.";
-            _logger.LogError(ex, "Error restaurando sesión persistente.");
+            ErrorMessage = $"Error sesión: {ex.Message}";
+            _logger.LogError(ex, "Error restaurando sesión.");
             await _sessionService.CerrarSesionGlobalAsync();
         }
-        finally { IsBusy = false; }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

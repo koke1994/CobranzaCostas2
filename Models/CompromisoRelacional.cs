@@ -1,4 +1,5 @@
 namespace CobranzaCostas.Models;
+
 public class CompromisoRelacional
 {
     public string Id { get; set; } = string.Empty;
